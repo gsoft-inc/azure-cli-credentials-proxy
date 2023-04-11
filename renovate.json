@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "platform": "github",
+  "labels": ["renovate"],
+  "extends": [
+    "config:base",
+    ":rebaseStalePrs",
+    "docker:disableMajor"
+  ],
+  "enabledManagers": [
+    "nuget",
+    "dockerfile",
+    "github-actions"
+  ],
+  "stabilityDays": 3,
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "branchConcurrentLimit": 0,
+  "dependencyDashboard": false,
+  "gitAuthor": "Renovate Bot <bot@renovateapp.com>",
+  "nuget": {
+    "extends": [":disableMajorUpdates"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["nuget"],
+      "groupName": "NuGet dependencies"
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "groupName": "Docker"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub actions dependencies"
+    }
+  ]
+}
