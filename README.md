@@ -54,7 +54,7 @@ Nonetheless, this is what developers do to use their personal Azure identity in 
 
 ## Solution
 
-Instead of installing Azure CLI in each service, we can run another container - a proxy, which is the only one that contains Azure CLI and a mount on `~/.azure/`. This container exposes an single endpoint which returns the Azure developer credentials retrieved with Azure CLI.
+Instead of installing Azure CLI in each service, we can run another container - a proxy, which is the only one that contains Azure CLI and a mount on `~/.azure/`. This container exposes a single endpoint which returns the Azure developer credentials retrieved with Azure CLI.
 
 Then, we must add two environment variables to each service:
 * `IDENTITY_ENDPOINT`: the URL of the proxy endpoint (ex: `http://myproxycontainer/token`)
