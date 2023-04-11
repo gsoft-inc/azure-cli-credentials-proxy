@@ -1,11 +1,16 @@
 # Azure CLI developer credentials proxy for Docker
 
-This is a simple containerized application that acts as a proxy **to allow other containerized applications to access Azure developer credentials without installing Azure CLI** on each individual container.
+This is a simple containerized application that acts as a proxy **to allow other containerized applications to access Azure developer credentials without installing Azure CLI** on each individual container. It was designed for use in **local development environments** only.
 
 
 ## Getting started
 
-Add `ghcr.io/gsoft-inc/azure-cli-credentials-proxy:latest` to your `docker-compose.yml` and mount your Linux or WSL `~/.azure/` directory:
+First, authenticate against GitHub packages (ghcr.io):
+
+1. Create a GitHub Personal Access Token (PAT) with `read:packages` scope.
+2. Log in to ghcr.io using `docker login ghcr.io -u USERNAME -p TOKEN`, replacing `USERNAME` with your GitHub username and `TOKEN` with your PAT.
+
+Then, add `ghcr.io/gsoft-inc/azure-cli-credentials-proxy:latest` to your `docker-compose.yml` and mount your Linux or WSL `~/.azure/` directory:
 
 ```yaml
 version: "3"
@@ -18,7 +23,7 @@ services:
       - "/home/<USERNAME>/.azure:/app/.azure/" # On Linux
 ```
 
-Then, add two environment variables to your containerized applications that use `DefaultAzureCredential` or `ManagedIdentityCredential`:
+Finally, add two environment variables to your containerized applications that use `DefaultAzureCredential` or `ManagedIdentityCredential`:
 
 ```yaml
 version: "3"
