@@ -6,6 +6,8 @@ on:
   workflow_dispatch: {}
   schedule:
     - cron: "32 7 * * 6"
+permissions:
+  security-events: write
 
 jobs:
   semgrep:
