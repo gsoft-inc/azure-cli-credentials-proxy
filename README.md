@@ -1,23 +1,20 @@
 # Azure CLI developer credentials proxy for Docker
 
+[![Docker Hub](https://img.shields.io/docker/v/workleap/azure-cli-credentials-proxy?logo=docker)](https://hub.docker.com/r/workleap/azure-cli-credentials-proxy)
+
 This simple containerized application acts as a proxy, **allowing other containerized applications to access Azure developer credentials without installing Azure CLI on each individual container**. It is designed for use in local development environments only.
 
 
 ## Getting started
 
-First, authenticate against GitHub packages (ghcr.io):
-
-1. Create a GitHub Personal Access Token (PAT) with `read:packages` scope.
-2. Log in to ghcr.io using `docker login ghcr.io -u USERNAME -p TOKEN`, replacing `USERNAME` with your GitHub username and `TOKEN` with your PAT.
-
-Next, add `ghcr.io/gsoft-inc/azure-cli-credentials-proxy:latest` to your `docker-compose.yml` and mount your Linux or WSL `~/.azure/` directory:
+Add `workleap/azure-cli-credentials-proxy:latest` to your `docker-compose.yml` and mount your Linux or WSL `~/.azure/` directory:
 
 ```yaml
 version: "3"
 
 services:
   azclicredsproxy:
-    image: ghcr.io/gsoft-inc/azure-cli-credentials-proxy:latest
+    image: workleap/azure-cli-credentials-proxy:latest
     volumes:
       - "\\\\wsl$\\<DISTRONAME>\\home\\<USERNAME>\\.azure\\:/app/.azure/" # On Windows with WSL
       - "/home/<USERNAME>/.azure:/app/.azure/" # On Linux
@@ -82,4 +79,4 @@ The solution is to use `az login` on your WSL distribution and mount `\\wsl$\Ubu
 
 ## License
 
-Copyright © 2023, [GSoft Group Inc](https://www.gsoft.com/). This code is licensed under the Apache License, Version 2.0. You may obtain a copy of this license at https://github.com/gsoft-inc/gsoft-license/blob/master/LICENSE.
+Copyright © 2023, [Workleap Inc.](https://workleap.com/). This code is licensed under the Apache License, Version 2.0. You may obtain a copy of this license at https://github.com/gsoft-inc/gsoft-license/blob/master/LICENSE.
