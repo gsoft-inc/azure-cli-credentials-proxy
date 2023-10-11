@@ -33,7 +33,7 @@ services:
     depends_on:
       - azclicredsproxy
     environment:
-      - "IDENTITY_ENDPOINT=http://azclicredsproxy/token"
+      - "IDENTITY_ENDPOINT=http://azclicredsproxy:8080/token"
       - "IMDS_ENDPOINT=dummy_required_value"
 ```
 
@@ -60,7 +60,7 @@ Instead of installing Azure CLI in each service, we can run another container - 
 
 Then, we must add two environment variables to each service:
 
-* `IDENTITY_ENDPOINT`: the URL of the proxy endpoint (e.g., `http://azclicredsproxy/token`)
+* `IDENTITY_ENDPOINT`: the URL of the proxy endpoint (e.g., `http://azclicredsproxy:8080/token`)
 * `IMDS_ENDPOINT`: an arbitrary but mandatory value (e.g., `random-placeholder`)
 
 With these two environment variables, any service that uses `DefaultAzureCredential` or `ManagedIdentityCredential` will now call the proxy when Azure credentials are needed. This is because one of `ManagedIdentityCredential`'s [source implementations](https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.6.0/sdk/identity/Azure.Identity/src/AzureArcManagedIdentitySource.cs) explicitly looks for both of these environment variables if they are specified.
