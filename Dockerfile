@@ -5,7 +5,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=true \
     AZ_INSTALLER=DOCKER
 RUN apk add --no-cache py3-pip && \
     apk add --no-cache --virtual=build gcc musl-dev python3-dev libffi-dev openssl-dev cargo make && \
-    pip install --no-cache-dir azure-cli && \
+    pip install --no-cache-dir --break-system-packages azure-cli && \
     apk del --purge build
 WORKDIR /app
 EXPOSE 8080
