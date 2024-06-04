@@ -11,9 +11,7 @@ var app = WebApplication.CreateBuilder(args).Build();
 app.MapGet("/token", async (HttpContext context, string resource) =>
 {
     var token = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
-
     context.Response.Headers.Add("Content-Type", "application/json"); // Set the Content-Type header to JSON
-
     return new Dictionary<string, string>
     {
         ["access_token"] = token.Token,
