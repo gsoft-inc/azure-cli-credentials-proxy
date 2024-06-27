@@ -28,7 +28,7 @@ app.MapGet("/token", async (HttpContext context, string resource) =>
 app.MapPost("/token", async (HttpContext context, HttpRequest request) =>
 {
     var form = await request.ReadFormAsync();
-    string resource = form["resource"].ToString();
+    var resource = form["resource"].ToString();
     var token = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
     context.Response.Headers.Add("Content-Type", "application/json"); // Set the Content-Type header to JSON
     return new Dictionary<string, string>
