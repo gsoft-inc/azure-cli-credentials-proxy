@@ -11,13 +11,32 @@ var app = WebApplication.CreateBuilder(args).Build();
 app.MapGet("/token", async (HttpContext context, string resource) =>
 {
     var token = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
-    context.Response.Headers.Add("Content-Type", "application/json"); // Set the Content-Type header to JSON
+    context.Response.Headers.Add("Content-Type", "application/json");
     return new Dictionary<string, string>
     {
         ["access_token"] = token.Token,
         ["expiresOn"] = token.ExpiresOn.ToString("O", CultureInfo.InvariantCulture),
         ["expires_on"] = token.ExpiresOn.ToUnixTimeSeconds().ToString(),
         ["tokenType"] = "Bearer",
+        ["resource"] = resource
+    };
+});
+
+// Can be consumed by "az login --identity" by specifying MSI_ENDPOINT environment variable to this action URL
+// https://github.com/Azure/msrestazure-for-python/blob/master/msrestazure/azure_active_directory.py#L474
+
+app.MapPost("/token", async (HttpContext context, HttpRequest request) =>
+{
+    var form = await request.ReadFormAsync();
+    var resource = form["resource"].ToString();
+    var token = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
+    context.Response.Headers.Add("Content-Type", "application/json");
+    return new Dictionary<string, string>
+    {
+        ["access_token"] = token.Token,
+        ["expiresOn"] = token.ExpiresOn.ToString("O", CultureInfo.InvariantCulture),
+        ["expires_on"] = token.ExpiresOn.ToUnixTimeSeconds().ToString(),
+        ["token_type"] = "Bearer",
         ["resource"] = resource
     };
 });

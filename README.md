@@ -35,6 +35,8 @@ services:
     environment:
       - "IDENTITY_ENDPOINT=http://azclicredsproxy:8080/token"
       - "IMDS_ENDPOINT=dummy_required_value"
+      # Specify MSI_ENDPOINT below if using "az login --identity" in your service.
+      - "MSI_ENDPOINT=http://azclicredsproxy:8080/token"
 ```
 
 
@@ -64,6 +66,9 @@ Then, we must add two environment variables to each service:
 * `IMDS_ENDPOINT`: an arbitrary but mandatory value (e.g., `random-placeholder`)
 
 With these two environment variables, any service that uses `DefaultAzureCredential` or `ManagedIdentityCredential` will now call the proxy when Azure credentials are needed. This is because one of `ManagedIdentityCredential`'s [source implementations](https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.6.0/sdk/identity/Azure.Identity/src/AzureArcManagedIdentitySource.cs) explicitly looks for both of these environment variables if they are specified.
+
+> [!NOTE]
+> If you are using using `az cli` in your service and your service wants to do `az login --identity` then specify `MSI_ENDPOINT`: the URL of the proxy endpoint (e.g., `http://azclicredsproxy:8080/token`) environment variable instead. `IDENTITY_ENDPOINT` and `IMDS_ENDPOINT` are not required for `az login --identity`.
 
 With this proxy, Dockerfiles can remain untouched and production-ready. The proxy can easily be added to an existing `docker-compose.yml`, and the environment variables are also easy to add. Now, the containerized environment looks like this:
 
