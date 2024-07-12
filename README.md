@@ -15,6 +15,8 @@ version: "3"
 services:
   azclicredsproxy:
     image: workleap/azure-cli-credentials-proxy:latest
+    ports:
+      - "8080:8080"
     volumes:
       - "\\\\wsl$\\<DISTRONAME>\\home\\<USERNAME>\\.azure\\:/app/.azure/" # On Windows with WSL
       - "/home/<USERNAME>/.azure:/app/.azure/" # On Linux
