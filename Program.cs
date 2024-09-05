@@ -10,13 +10,13 @@ var app = WebApplication.CreateBuilder(args).Build();
 
 app.MapGet("/token", async (HttpContext context, string resource) =>
 {
-    var token = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
-    context.Response.Headers.Add("Content-Type", "application/json");
+    var token = await tokenCredential.GetTokenAsync(new TokenRequestContext([resource]));
+    context.Response.Headers.ContentType = "application/json";
     return new Dictionary<string, string>
     {
         ["access_token"] = token.Token,
         ["expiresOn"] = token.ExpiresOn.ToString("O", CultureInfo.InvariantCulture),
-        ["expires_on"] = token.ExpiresOn.ToUnixTimeSeconds().ToString(),
+        ["expires_on"] = token.ExpiresOn.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture),
         ["tokenType"] = "Bearer",
         ["resource"] = resource
     };
@@ -30,7 +30,7 @@ app.MapPost("/token", async (HttpContext context, HttpRequest request) =>
     var form = await request.ReadFormAsync();
     var resource = form["resource"].ToString();
     var token = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
-    context.Response.Headers.Add("Content-Type", "application/json");
+    context.Response.Headers.ContentType = "application/json";
     return new Dictionary<string, string>
     {
         ["access_token"] = token.Token,
