@@ -20,7 +20,7 @@ RUN dotnet publish "AzureCliCredentialProxy.csproj" -c Release -r linux-musl-x64
 
 
 FROM base AS final
-RUN adduser --disabled-password --home /app --gecos '' app && chown -R app /app
+RUN chown -R app /app
 USER app
 WORKDIR /app
 COPY --from=publish /app/publish .
